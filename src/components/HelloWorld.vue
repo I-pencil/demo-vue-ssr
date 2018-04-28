@@ -90,7 +90,10 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
-  }
+  },
+  asyncData({ store, route }) {
+    console.log('=================')
+  },
 }
 </script>
 

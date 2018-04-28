@@ -1,4 +1,6 @@
 
+const vuxLoader = require('vux-loader')
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
@@ -19,9 +21,10 @@ const createLintingRule = () => ({
   }
 })
 
-module.exports = {
+const originalConfig = {
   context: path.resolve(__dirname, '../'),
   entry: {
+
     app: './src/entry-client.js'
   },
   output: {
@@ -45,6 +48,13 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: vueLoaderConfig
+      },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
       },
       {
         test: /\.js$/,
@@ -88,5 +98,18 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
-  }
+  },
+  plugins: [
+    new ExtractTextPlugin("styles.css"),
+  ]
 }
+
+module.exports = vuxLoader.merge(originalConfig, {
+  plugins: [
+    'vux-ui',
+    {
+      name: 'less-theme',
+      path: 'src/styles/theme.less'
+    }
+  ]
+})

@@ -1,11 +1,11 @@
 const config = require('./config')
 const webpack = require('webpack')
-const opn = require('opn')
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
 const compression = require('compression')
 const proxyMiddleware = require('http-proxy-middleware')
+const LRU = require('lru-cache')
 
 const outputPath = config.build.assetsRoot // /dist/ 这里和配置文件output路径一致
 
@@ -13,8 +13,7 @@ const resolve = file => path.resolve(__dirname, file)
 
 // default port where dev server listens for incoming traffic
 const port = process.env.PORT || config.dev.port
-// automatically open browser, if not set will be false
-const autoOpenBrowser = !!config.dev.autoOpenBrowser
+
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
 const proxyTable = config.dev.proxyTable
@@ -47,6 +46,9 @@ if (isProduction) {
     renderer = createRenderer(bundle, template)
   })
 }
+// serve pure static assets
+var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+app.use(staticPath, express.static('./static'))
 
 function createRenderer (bundle, template) {
   const clientManifestPath = path.join(outputPath, 'vue-ssr-client-manifest.json')
@@ -55,7 +57,7 @@ function createRenderer (bundle, template) {
     template,
     clientManifest,
     runInNewContext: false, // 推荐
-    cache: require('lru-cache')({
+    cache: LRU({
       max: 1000,
       maxAge: 1000 * 60 * 15
     })
@@ -66,8 +68,8 @@ const server = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProduction ? 60 * 60 * 24 * 30 : 0
 })
 
-app.use(compression({ threshold: 0 }))
-app.use('/dist', server('./dist', true))
+// app.use(compression({ threshold: 0 }))
+// app.use('/dist', server('./dist', true))
 
 
 // proxy api requests
@@ -82,9 +84,6 @@ Object.keys(proxyTable).forEach(function (context) {
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
 
-// serve pure static assets
-var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(staticPath, express.static('./static'))
 
 app.get('*', (req, res) => {
   if (!renderer) {

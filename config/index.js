@@ -15,8 +15,8 @@ module.exports = {
     proxyTable: {
       api: {
         filter: '/api',
-        pathRewrite: {'^/api/': '/'},
-        target: 'https://m.bilibili.com',
+        // pathRewrite: {'^/api/': '/api/'},
+        target: 'https://api.bilibili.com',
         changeOrigin: true
       }
     },
@@ -24,7 +24,6 @@ module.exports = {
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-    autoOpenBrowser: true,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
