@@ -47,8 +47,8 @@ if (isProduction) {
   })
 }
 // serve pure static assets
-var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
-app.use(staticPath, express.static('./static'))
+// var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+// app.use(staticPath, express.static('./static'))
 
 function createRenderer (bundle, template) {
   const clientManifestPath = path.join(outputPath, 'vue-ssr-client-manifest.json')
@@ -68,8 +68,8 @@ const server = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProduction ? 60 * 60 * 24 * 30 : 0
 })
 
-// app.use(compression({ threshold: 0 }))
-// app.use('/dist', server('./dist', true))
+app.use(compression({ threshold: 0 }))
+app.use('/dist', server('./dist', true))
 
 
 // proxy api requests

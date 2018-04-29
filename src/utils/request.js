@@ -1,9 +1,10 @@
 import axios from 'axios'
 
-export function get (url, params) {
-  return axios.get(url, params)
+export function get (url) {
+  return axios.get(url)
     .then(response => {
-      console.log(response)
+      // console.log(response)
+      return response.data
     }).catch(err => {
       console.log(err)
     })

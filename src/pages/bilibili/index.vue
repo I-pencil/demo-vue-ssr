@@ -7,7 +7,7 @@
       <tab-item>国创</tab-item>
       <tab-item>音乐</tab-item>
     </tab>
-    <swiper :list="[]" class="banner" auto height="110px" dots-class="custom-bottom" dots-position="center"></swiper>
+    <swiper :list="banner" class="banner" auto height="110px" dots-class="custom-bottom" dots-position="center"></swiper>
     <div class="data__bd">
       <div class="data-item">
         <div class="data-item__bd">
@@ -28,12 +28,17 @@ export default {
   asyncData({ store, route }) {
     store.registerModule('homeStore', homeStore)
     // 触发 action 后，会返回 Promise
-    return store.dispatch('fetchItem')
+    return store.dispatch('fetchBanner')
   },
   computed: {
-    // 从 store 的 state 对象中的获取 item。
-    item () {
-      // return this.$store.state.items[this.$route.params.id]
+    banner () {
+      // const bannerData = this.$store.state.homeStore.bannerList.data
+
+      // if (bannerData) {
+      //   return bannerData.map(item => {
+      //     return item.pic
+      //   })
+      // }
     }
   },
   components: {

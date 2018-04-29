@@ -1,4 +1,4 @@
 export default {
-  homeBanner: '/api/x/web-show/res/loc',
-  list: '/api/x/web-interface/ranking'
+  homeBanner: 'https://api.bilibili.com/x/web-show/res/loc?pf=7&id=1695',
+  list: 'https://api.bilibili.com/x/web-interface/ranking'
 }
