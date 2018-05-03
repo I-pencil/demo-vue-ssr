@@ -29,7 +29,7 @@ module.exports = function setupDevServer (app, cb) {
 
   app.use(devMiddleware)
   clientCompiler.plugin('done', () => {
-    const filePath = path.join(clientWebpackConfig.output.path, 'index.html')
+    const filePath = path.join('./', 'index.html')
     template = fs.readFileSync(filePath, 'utf-8')
     if (bundle) {
       cb(bundle, template)

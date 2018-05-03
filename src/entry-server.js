@@ -14,7 +14,7 @@ export default context => {
       // 匹配不到的路由，执行 reject 函数，并返回 404
       if (!matchedComponents.length) {
         /* eslint-disable */
-        return reject({ code: '404' })
+        return reject({ code: 404 })
       }
 
       resolve(app)
