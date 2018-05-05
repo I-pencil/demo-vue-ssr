@@ -12,6 +12,12 @@
         <img :src="item.pic">
       </swiper-item>
     </swiper>
+    <div class="main-list">
+      <div class="list-item" v-for="(item, index) in list" :key="index">
+        <img :src="item.pic" alt="">
+        <p class="item-desc">{{ item.title }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,7 +29,8 @@ export default {
   name: 'bilibiliHome',
   asyncData({ store, route }) {
     store.registerModule('homeModule', homeModule)
-    return store.dispatch('getBanner')
+    store.dispatch('getBanner')
+    store.dispatch('getList')
   },
   computed: {
     banner () {
@@ -32,6 +39,12 @@ export default {
         return banneList
       }
     },
+    list () {
+      const listData = this.$store.state.homeModule.list
+      if (listData) {
+        return listData.list
+      }
+    }
   },
   components: {
     Swiper,
@@ -48,5 +61,21 @@ export default {
 <style lang="less" scoped>
 img {
   width: 100%;
+}
+.main-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.list-item {
+  padding-top: 10px;
+  width: 50%;
+  box-sizing: border-box;
+}
+.list-item:nth-child(odd) {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.list-item:nth-child(enve) {
+  padding-right: 10px;
 }
 </style>

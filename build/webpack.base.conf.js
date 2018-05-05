@@ -1,4 +1,3 @@
-
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
@@ -24,6 +23,7 @@ const createLintingRule = () => ({
 const base = {
   context: path.resolve(__dirname, '../'),
   entry: {
+
     app: './src/entry-client.js'
   },
   output: {
@@ -47,6 +47,13 @@ const base = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: vueLoaderConfig
+      },
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
       },
       {
         test: /\.js$/,

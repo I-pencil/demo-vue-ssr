@@ -62,6 +62,9 @@ if (isProduction) {
       renderer = createRenderer(bundle, options)
   })
 }
+// serve pure static assets
+// var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
+// app.use(staticPath, express.static('./static'))
 
 const serve = (path, cache) => express.static(resolve(path), {
   maxAge: cache && isProduction ? 60 * 60 * 24 * 30 : 0

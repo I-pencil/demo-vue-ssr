@@ -5768,7 +5768,7 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
 
 route-cache@^0.4.4:
   version "0.4.4"
-  resolved "http://registry.npm.taobao.org/route-cache/download/route-cache-0.4.4.tgz#c7141fac4e44d1480dae1c1ba44458d91ad1a98a"
+  resolved "https://registry.yarnpkg.com/route-cache/-/route-cache-0.4.4.tgz#c7141fac4e44d1480dae1c1ba44458d91ad1a98a"
   dependencies:
     debug "3.1.0"
     lru-cache "4.0.1"
