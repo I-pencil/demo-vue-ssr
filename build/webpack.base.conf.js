@@ -1,10 +1,9 @@
-
-const vuxLoader = require('vux-loader')
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
+const vuxLoader = require('vux-loader')
 const vueLoaderConfig = require('./vue-loader.conf')
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -21,7 +20,7 @@ const createLintingRule = () => ({
   }
 })
 
-const originalConfig = {
+const base = {
   context: path.resolve(__dirname, '../'),
   entry: {
 
@@ -104,7 +103,7 @@ const originalConfig = {
   ]
 }
 
-module.exports = vuxLoader.merge(originalConfig, {
+module.exports = vuxLoader.merge(base, {
   plugins: [
     'vux-ui',
     {

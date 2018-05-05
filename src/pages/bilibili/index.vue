@@ -7,62 +7,75 @@
       <tab-item>国创</tab-item>
       <tab-item>音乐</tab-item>
     </tab>
-    <swiper :list="banner" class="banner" auto height="110px" dots-class="custom-bottom" dots-position="center"></swiper>
-    <div class="data__bd">
-      <div class="data-item">
-        <div class="data-item__bd">
-          <img src="" alt="">
-        </div>
-        <p class="data-item__ft">hahahah</p>
+    <swiper auto height="110px" dots-position="center">
+      <swiper-item :key="index" v-for="(item, index) in banner">
+        <img :src="item.pic">
+      </swiper-item>
+    </swiper>
+    <div class="main-list">
+      <div class="list-item" v-for="(item, index) in list" :key="index">
+        <img :src="item.pic" alt="">
+        <p class="item-desc">{{ item.title }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, Swiper } from 'vux'
-import homeStore from './store'
+import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import homeModule from './store/homeModule'
 
 export default {
-  name: 'bilibili-home',
+  name: 'bilibiliHome',
   asyncData({ store, route }) {
-    store.registerModule('homeStore', homeStore)
-    // 触发 action 后，会返回 Promise
-    return store.dispatch('fetchBanner')
+    store.registerModule('homeModule', homeModule)
+    store.dispatch('getBanner')
+    store.dispatch('getList')
   },
   computed: {
     banner () {
-      // const bannerData = this.$store.state.homeStore.bannerList.data
-
-      // if (bannerData) {
-      //   return bannerData.map(item => {
-      //     return item.pic
-      //   })
-      // }
+      const banneList = this.$store.state.homeModule.bannerData
+      if (banneList) {
+        return banneList
+      }
+    },
+    list () {
+      const listData = this.$store.state.homeModule.list
+      if (listData) {
+        return listData.list
+      }
     }
   },
   components: {
+    Swiper,
+    SwiperItem,
     Tab,
     TabItem,
-    Swiper,
   },
-  destroyed () {
-    this.$store.unregisterModule('homeStore')
+  destroyed() {
+    this.$store.unregisterModule('homeModule')
   }
 }
 </script>
 
 <style lang="less" scoped>
-.banner {
-  margin-bottom: 10px;
+img {
+  width: 100%;
 }
-.data__bd {
+.main-list {
   display: flex;
   flex-wrap: wrap;
 }
-.data-item {
-  padding: 0px 10px 10px;
-  min-width: 50%;
+.list-item {
+  padding-top: 10px;
+  width: 50%;
   box-sizing: border-box;
+}
+.list-item:nth-child(odd) {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.list-item:nth-child(enve) {
+  padding-right: 10px;
 }
 </style>
