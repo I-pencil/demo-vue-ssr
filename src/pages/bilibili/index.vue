@@ -29,8 +29,9 @@ export default {
   name: 'bilibiliHome',
   asyncData({ store, route }) {
     store.registerModule('homeModule', homeModule)
-    store.dispatch('getBanner')
-    store.dispatch('getList')
+    return Promise.all([store.dispatch('getBanner'), store.dispatch('getList')])
+    // store.dispatch('getBanner')
+    // store.dispatch('getList')
   },
   computed: {
     banner () {

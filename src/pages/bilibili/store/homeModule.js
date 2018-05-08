@@ -8,12 +8,12 @@ export default {
   },
   actions: {
     getBanner ({ commit }) {
-      get(API.getHomeBanner).then(result => {
+      return get(API.getHomeBanner).then(result => {
         commit('initBanner', result.data)
       })
     },
     getList ({ commit }) {
-      get(API.getlist).then(result => {
+      return get(API.getlist).then(result => {
         commit('initList', { list: result.data.list })
       })
     }
