@@ -10,6 +10,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -24,16 +25,35 @@ const webpackConfig = merge(baseWebpackConfig, {
     filename: utils.assetsPath('scripts/[name].[chunkhash].js'),
     chunkFilename: utils.assetsPath('scripts/[name].[id].[chunkhash].js')
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      minChunks: Infinity,
+      automaticNameDelimiter: '-',
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_nodules[\\/]/,
+          priority: -10,
+        },
+      },
+    },
+    runtimeChunk: 'single',
+  },
   plugins: [
     // UglifyJs do not support ES6+, you can also use babel-minify for better treeshaking: https://github.com/babel/minify
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false
+    new UglifyJSPlugin({
+      cache: true,
+      parallel: true,
+      sourceMap: true,
+      uglifyOptions: {
+        output: {
+          comments: false,
+        },
+        compress: {
+          warnings: false,
+          drop_console: true,
+        },
       },
-      mangle: {
-        safari10: true // 解决iOS 10 白屏问题 参考链接：https://mp.weixin.qq.com/s/DO5wHuDIqNK7tGTLwGEHpQ
-      },
-      sourceMap: true
     }),
     // extract css into its own file
     new ExtractTextPlugin({
@@ -62,26 +82,6 @@ const webpackConfig = merge(baseWebpackConfig, {
       },
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
-    }),
-    // split vendor js into its own file
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: function (module, count) {
-        // any required modules inside node_modules are extracted to vendor
-        return (
-          module.resource &&
-          /\.js$/.test(module.resource) &&
-          module.resource.indexOf(
-            path.join(__dirname, '../node_modules')
-          ) === 0
-        )
-      }
-    }),
-    // extract webpack runtime and module manifest to its own file in order to
-    // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      chunks: ['vendor']
     }),
     // copy custom static assets
     new CopyWebpackPlugin([
